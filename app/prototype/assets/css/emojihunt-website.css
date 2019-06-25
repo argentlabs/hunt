@@ -1,0 +1,225 @@
+.logo-wrapper {
+  display: flex;
+  width: 100%;
+  padding: 80px 32px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+
+.logo {
+  margin: 0;
+}
+
+.logo a {
+  display: block;
+  width: 200px;
+  height: 37px;
+  background: url('../images/logo-EmojiHunt.svg') no-repeat;
+  background-size: cover;
+}
+
+
+@media (min-width: 576px) {
+  .logo a {
+    width: 330px;
+    height: 60px;
+  }
+}
+
+
+.win-wrapper {
+  position: relative;
+  padding: 40px;
+  text-align: center;
+  background-color: var(--emojijunt-pink);
+  color: #ffffff;
+}
+
+.win-circle {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+
+.win-wrapper .prize-amount {
+  position: relative;
+  font-size: 80px;
+  line-height: 1;
+  margin-bottom: 0;
+}
+
+
+.win-wrapper .prize-amount .icon-dai {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+}
+
+.emoji-unicorn {
+  width: 100px;
+  transform: rotate(-25deg);
+  position: absolute;
+  top: -50px;
+  right: -30px;
+}
+
+
+
+
+.emojihunt main {
+  padding: 0 48px 48px;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.emojihunt main > * {
+  width: 100%;
+  max-width: 400px;
+}
+
+
+
+
+
+/* Win or lose animations */
+.win-or-lose {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-top: -60px;
+  margin-bottom: 24px;
+}
+
+.emoji-winner-cup,
+.emoji-flying-cash {
+  width: 160px;
+  margin: 0 32px;
+}
+
+.or {
+  font-size: 32px;
+  margin-top: 16px;
+}
+
+
+
+
+
+/* Countdown */
+.countdown,
+.countdown > h4 {
+  position: relative;
+  background-color: var(--emojihunt-blue);
+  color: #ffffff;
+  text-align: center;
+  border-radius: 8px;
+  padding: 32px 16px;
+  margin-bottom: 40px;
+}
+
+.countdown > h4 {
+  min-width: 140px;
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: inline-block;
+  padding: 16px 32px 0;
+}
+
+.countdown .days,
+.countdown .hours,
+.countdown .minutes {
+  display: inline-block;
+  margin: 0 8px;
+}
+
+.countdown :first-child {
+  margin-left: 0;
+}
+
+.countdown :last-child {
+  margin-right: 0;
+}
+
+.countdown .countdown-value {
+  font-size: 40px;
+  font-weight: 500;
+}
+
+
+
+
+
+/* How to play */
+.how-to-play h2 {
+  position: relative;
+  text-align: center;
+  color: var(--argent-dark-charcoal);
+  margin-bottom: 1rem;
+}
+
+.how-to-play h2:before,
+.how-to-play h2:after {
+  content: "";
+  display: block;
+  width: 88px;
+  height: 88px;
+  position: absolute;
+  top: 0;
+}
+
+.how-to-play h2:before {
+  left: -16px;
+  background: url("../images/animations/rocket.gif") no-repeat;
+  background-size: cover;
+}
+
+.how-to-play h2:after {
+  right: -16px;
+  background: url("../images/animations/ghost.gif") no-repeat;
+  background-size: cover;
+}
+
+.how-to-play__box {
+  background-color: var(--argent-mayo);
+  padding: 32px 20px;
+  margin-bottom: 24px;
+  border-radius: 8px;
+}
+
+.app-store-buttons {
+  width: auto;
+}
+
+
+
+
+/* Enter address */
+.how-to-play__box .form-control {
+  background: white;
+  border-radius: 4px;
+  padding: 16px;
+  font-size: 18px;
+  margin-top: 0;
+}
+
+.how-to-play__box .input-group-append {
+  padding: 16px 8px 16px 16px;
+}
+
+
+.how-to-play .button {
+  display: block;
+  width: 100%;
+  padding: 16px 24px;
+  font-weight: 600;
+  background-color: var(--emojijunt-pink);
+}
