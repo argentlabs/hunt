@@ -25,10 +25,10 @@ class Signin extends Component {
     }
 
     onRegister = async () => { 
-        if (!this.state.ens.endsWith(ARGENT_ENS)) { console.log(this.state.ens);
+        if (!this.state.ens.endsWith(ARGENT_ENS)) { 
             this.setState({
                 error: true,
-                errorMessage: 'Invalid ENS',
+                errorMessage: 'Not an Argent ENS',
                 ens: null
             });
             return;
@@ -46,7 +46,7 @@ class Signin extends Component {
             if (response.ok !== true) {
                 this.setState({
                     error: true,
-                    errorMessage: 'Failed to fetch'
+                    errorMessage: 'You need an Argent wallet'
                 });
                 return;
             }
@@ -57,7 +57,7 @@ class Signin extends Component {
         } catch (er) {
             this.setState({
                 error: true,
-                errorMessage: 'Error'
+                errorMessage: 'Failed to contact the backend'
             });
             return;
         }
