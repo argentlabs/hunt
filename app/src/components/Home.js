@@ -51,26 +51,41 @@ class Home extends Component {
             tokens
         } = this.state;
         return (
-            <main>
-            { isRegistered ? (
-            <div>
-                <p>
-                    Hello {walletEns}
-                </p>
-                <ul>
-                    {tokens.map( (token, index) => {
-                        return(
-                            <li>
-                                <Token id={token.id} state={token.state}/>
-                            </li>
-                        )
-                    })}
-                </ul>
-            </div>
-            ) : (
-                <Signin onRegistered={this.onRegistered}/>
-            )}           
-		</main>
+            <React.Fragment>
+               <div class="logo-wrapper">
+                    <h1 class="logo"><a href="#" class="text-hide">EmojiHunt</a></h1>
+                </div>
+
+                <div class="win-wrapper">
+                    <img src="assets/images/win-circle.svg" class="win-circle" alt="Win 500 DAI" />
+
+                    <img src="assets/images/animations/unicorn.gif" class="emoji-unicorn" alt="Unicorn Emoji" />
+
+                    <p class="prize-amount medium">
+                        $500
+                        <img src="assets/images/icon-dai.svg" class="icon-dai" alt="DAI icon" />
+                    </p>
+                    <p class="prize-currency h2 regular">in DAI</p>
+                </div>
+                { isRegistered ? (
+                <div>
+                    <p>
+                        Hello {walletEns}
+                    </p>
+                    <ul>
+                        {tokens.map( (token, index) => {
+                            return(
+                                <li>
+                                    <Token id={token.id} state={token.state}/>
+                                </li>
+                            )
+                        })}
+                    </ul>
+                </div>
+                ) : (
+                    <Signin onRegistered={this.onRegistered}/>
+                )} 
+            </React.Fragment>
         );
     }
 }
