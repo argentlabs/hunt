@@ -1,0 +1,65 @@
+/* ========================================================================
+   Argent Forms
+   ======================================================================== */
+
+.form-group {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.form-control {
+  height: auto;
+}
+
+.form-control,
+.form-control:focus {
+  background-color: var(--argent-sand);
+  border: 0;
+}
+
+.form-search {
+  max-width: 31em;
+  border: 0;
+  background: var(--argent-sand) url("../images/icons/icon-search.svg") 10px 50% no-repeat;
+  padding-left: 32px;
+}
+
+::placeholder,
+::-webkit-input-placeholder {
+  color: var(--argent-clay);
+}
+
+.button {
+  display: inline-block;
+  padding: 8px 24px;
+  background-color: var(--argent-orange);
+  border: 0;
+  color: #ffffff;
+  border-radius: 30px;
+  transition: all 0.3s ease-out;
+  text-align: center;
+  cursor: pointer;
+}
+
+.button:focus,
+.button:hover {
+  background-color: var(--argent-orange-wcag);
+  color: #ffffff;
+  outline: 0;
+}
+
+
+.button-simple {
+  min-width: 5.4em;
+  border: 1px solid var(--argent-black);
+  border-radius: 4px;
+  padding: 0.5em 0.85em 0.5em;
+  font-size: 0.75em;
+  font-weight: 300;
+  background-color: #ffffff;
+}
+
+.button-simple:focus,
+.button-simple:hover {
+  background-color: var(--argent-black-transparent);
+}

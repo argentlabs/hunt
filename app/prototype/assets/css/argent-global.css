@@ -1,0 +1,176 @@
+/*!
+ * EmojiHunt CSS v0.1
+ * Authored by Graeme Blackwood
+ */
+:root {
+  /* Argent colour palette */
+  --argent-orange:              rgb(255, 135, 91);
+  --argent-orange-transparent:  rgba(255, 135, 91, 0.1);
+  --argent-orange-wcag:         rgb(243, 106, 61);
+  --argent-orange-reversed:     rgb(0, 120, 164);
+  --argent-green-wcag:          rgb(2,187,168);
+  --argent-black:               rgb(51, 51, 50);
+  --argent-black-transparent:   rgba(51, 51, 50, 0.08);
+  --argent-dark-charcoal:       rgb(92, 91, 89);
+  --argent-light-charcoal:      rgb(143, 142, 140);
+  --argent-clay:                rgb(194, 192, 190);
+  --argent-sand:                rgb(245, 243, 240);
+  --argent-mayo:                rgb(250, 248, 245);
+
+
+
+  /* EmojiHunt colour palette */
+  --emojijunt-pink:   #FF9ABE;
+  --emojihunt-purple: #7989E8;
+  --emojihunt-blue:   #5CD3FF;
+
+  --danger: rgb(193, 32, 38);
+}
+
+html,
+body,
+#root {
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  display: flex;
+  -ms-flex: 1 1 auto!important;
+  flex: 1 1 auto!important;
+}
+
+
+/* Bootstrap overrides */
+.show {
+  display: block;
+}
+
+.alert {
+  border: 0;
+  border-radius: 8px;
+}
+
+.alert-warning {
+  color: var(--argent-orange-wcag);
+  background-color: var(--argent-orange-transparent);
+}
+
+img {
+  max-width:100%;
+}
+
+
+.icon-medium,
+.icon-twitter,
+.icon-telegram,
+.icon-github {
+  display: block;
+  width: 5vh;
+  height: 5vh;
+  margin-left: 1rem;
+  margin-right: 1rem;
+
+  overflow: hidden;
+  text-indent: -500em;
+}
+
+.icon-medium {
+  background: url("../images/icons/icon-medium.svg") no-repeat;
+  background-size: cover;
+
+  transition: transform 0.3s 0.5s ease-in-out;
+}
+
+.icon-twitter {
+  background: url("../images/icons/icon-twitter.svg") no-repeat;
+  background-size: cover;
+
+  transition: transform 0.3s 0.6s ease-in-out;
+}
+
+.icon-telegram {
+  background: url("../images/icons/icon-telegram.svg") no-repeat;
+  background-size: cover;
+
+  transition: transform 0.3s 0.7s ease-in-out;
+}
+
+.icon-github {
+  background: url("../images/icons/icon-github.svg") no-repeat;
+  background-size: cover;
+
+  transition: transform 0.3s 0.7s ease-in-out;
+}
+
+
+.inverted {
+  color: #ffffff;
+}
+
+.inverted:focus,
+.inverted:hover {
+  color: #ffffff;
+}
+
+/* Co-branding */
+iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+
+.app-store-buttons {
+  display: flex;
+  width: 100%;
+  /*justify-content: space-between;*/
+}
+
+.app-store-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 0 -8px;
+}
+
+.app-store-buttons > a {
+  flex: 1 1 auto;
+  text-align: center;
+  margin: 0 8px;
+}
+
+
+
+
+
+
+
+
+/*
+ * Social icons – currently only used on homepage. Will go in footer in future
+ */
+.social-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+
+
+
+/*
+ * Font Awesome
+ */
+.fa-external-link-alt {
+  color: var(--argent-dark-charcoal);
+}
