@@ -1,0 +1,19 @@
+{
+  "name": "hunt",
+  "version": "0.1.0",
+  "description": "Emoji Hunt",
+  "main": "truffle.js",
+  "repository": "https://github.com/argentlabs/hunt",
+  "author": "olivier@argent.xyz",
+  "license": "ISC",
+  "devDependencies": {
+    "openzeppelin-solidity": "^2.3.0"
+  },
+  "scripts": {
+    "compile": "truffle compile",
+    "test": "truffle test",
+    "testrpc": "ganache-cli",
+    "coverage": "truffle-coverage",
+    "lint": "solhint contracts/**/*.sol"
+  }
+}
