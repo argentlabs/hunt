@@ -123,6 +123,10 @@
   margin-bottom: 40px;
 }
 
+.countdown > h1 {
+  margin: 0;
+}
+
 .countdown > h4 {
   min-width: 140px;
   position: absolute;
