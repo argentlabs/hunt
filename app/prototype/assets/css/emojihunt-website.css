@@ -112,6 +112,8 @@
 
 
 /* Countdown */
+.instructions,
+.instructions > h4,
 .countdown,
 .countdown > h4 {
   position: relative;
@@ -123,7 +125,12 @@
   margin-bottom: 40px;
 }
 
-.countdown > h4 {
+.countdown > h1 {
+  margin: 0;
+}
+
+.countdown > h4,
+.instructions > h4 {
   min-width: 140px;
   position: absolute;
   top: -20px;
@@ -159,7 +166,8 @@
 
 
 /* How to play */
-.how-to-play h2 {
+.how-to-play h2,
+.your-emojis h2 {
   position: relative;
   text-align: center;
   color: var(--argent-dark-charcoal);
@@ -216,10 +224,30 @@
 }
 
 
-.how-to-play .button {
+.how-to-play .button,
+.how-to-play__box .button {
   display: block;
   width: 100%;
   padding: 16px 24px;
   font-weight: 600;
   background-color: var(--emojijunt-pink);
+}
+
+.how-to-play__box .emojis {
+  display: flex;
+  justify-content: space-around;
+}
+
+.how-to-play__box .you-have,
+.how-to-play__box .you-need {
+  text-align: center;
+  font-size: 6em;
+}
+
+.your-emojis {
+  text-align: center;
+}
+
+.instructions p:last-child {
+  margin-bottom: 0;
 }

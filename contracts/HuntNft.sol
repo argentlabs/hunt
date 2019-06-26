@@ -1,57 +1,85 @@
 pragma solidity ^0.5.0;
 
+import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "openzeppelin-solidity/contracts/token/ERC721/ERC721.sol";
 import "openzeppelin-solidity/contracts/token/ERC721/ERC721Metadata.sol";
+import "openzeppelin-solidity/contracts/token/ERC721/ERC721Enumerable.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 
-contract HuntNft is ERC721, ERC721Metadata("Emoji Hunt", "HUNT"), Ownable {
+contract HuntNft is ERC721, ERC721Metadata("Emoji Hunt", "HUNT"), ERC721Enumerable, Ownable {
 
-    bytes4 constant internal REQUEST_COMBINATION = bytes4(keccak256("requestCombination(uint256,address)"));
-    bytes4 constant internal APPROVE_COMBINATION = bytes4(keccak256("approveCombination(uint256,uint256)"));
+    bytes4 constant internal MATCH_TOKEN_SIG = bytes4(keccak256("matchToken(uint256,address)"));
 
-    mapping(uint256 => uint256) types; // [tokenId] => [typeId]
-    mapping(uint256 => mapping(uint256 => uint256)) possibleCombinations; // [type1][type2] => [resultingType]
-    mapping(uint256 => address) pendingCombinations;
+    mapping(uint256 => uint256) public types; // [tokenId] => [typeId]
+    mapping(uint256 => mapping(uint256 => uint256)) public possibleCombinations; // [type1][type2] => [resultingType]
 
-    uint256 lastTokenId;
+    mapping(address => Match) internal pendingMatches;
 
-    event CombinationRequested(address indexed _combiner, uint256 _tokenId1);
-    event CombinationApproved(address indexed _combiner, address indexed _owner2, uint256 _resultingTypeId);
+    uint256 public lastTokenId;
 
+    uint256 public cashoutReward;
+    address public cashoutToken;
+    uint256 public cashableTypeId;
 
-    constructor()  public {
-        
+    struct Match {
+        uint256 tokenId;
+        address partner;
     }
 
-    function safeTransferFrom(address _from, address _to, uint256 _tokenId, bytes memory _data) external {
-        (bytes4 methodId, uint256 tokenId1, uint256 param2) = abi.decode(_data,(bytes4, uint256, uint256));
-        if (methodId == REQUEST_COMBINATION) {
-            requestCombination(tokenId1, address(param2));
-        } else if (methodId == APPROVE_COMBINATION) {
-            approveCombination(tokenId1, param2);
+    constructor() public {}
+
+    function safeTransferFrom(address _from, address _to, uint256 _tokenId, bytes memory _data) public {
+        bytes4 sig;
+        uint256 tokenId;
+        address partner;
+        assembly {
+            sig := mload(add(_data, 0x20))
+            tokenId := mload(add(_data, 0x24))
+            partner := mload(add(_data, 0x44))
+        }
+
+        if (sig == MATCH_TOKEN_SIG) {
+            matchToken(tokenId, partner);
         } else {
             super.safeTransferFrom(_from, _to, _tokenId, _data);
         }
     }
 
-    function requestCombination(uint256 _tokenId1, address _combiner) public {
-        require(_isApprovedOrOwner(msg.sender, _tokenId1), "HN: unauthorized caller for requestCombination");
-        pendingCombinations[_tokenId1] = _combiner;
-        emit CombinationRequested(_combiner, _tokenId1);
+    function matchToken(uint256 _tokenId, address _partner) public {
+        require(_isApprovedOrOwner(msg.sender, _tokenId), "HN: unauthorized caller for match");
+        if(pendingMatches[_partner].partner == msg.sender) {
+            uint256 partnerTokenId = pendingMatches[_partner].tokenId;
+            uint256 resultingType = getResultingType(_tokenId, partnerTokenId);
+            if(resultingType > 0) {
+                _burn(_tokenId);
+                _burn(partnerTokenId);
+                _mintWithType(_partner, resultingType);
+                _mintWithType(msg.sender, resultingType);
+                delete pendingMatches[_partner];
+                return;
+            }
+        }
+        pendingMatches[msg.sender] = Match(_tokenId, _partner);
     }
 
-    function approveCombination(uint256 _tokenId1, uint256 _tokenId2) public {
-        require(_isApprovedOrOwner(msg.sender, _tokenId2), "HN: unauthorized caller for approvedCombination");
-        require(pendingCombinations[_tokenId1] == msg.sender, "HN: no pending combination");
-        uint256 resultingType = possibleCombinations[types[_tokenId1]][types[_tokenId2]];
-        require(resultingType > 0, "HN: impossible combination");
-        address owner1 = ownerOf(_tokenId1);
-        _burn(_tokenId1);
-        _burn(_tokenId2);
-        _mintWithType(owner1, resultingType);
-        _mintWithType(msg.sender, resultingType);
-        emit CombinationApproved(msg.sender, owner1, resultingType);
+    function getResultingType(uint256 _tokenId1, uint256 _tokenId2) public view returns (uint256 _resultingType) {
+        uint256 typeId1 = types[_tokenId1];
+        uint256 typeId2 = types[_tokenId2];
+        uint256 minTypeId = typeId1 <= typeId2 ? typeId1 : typeId2;
+        uint256 maxTypeId = typeId1 > typeId2 ? typeId1 : typeId2;
+        return possibleCombinations[minTypeId][maxTypeId];
+    }
+
+    function cashout(uint256 _tokenId) external {
+        require(_isApprovedOrOwner(msg.sender, _tokenId), "HN: unauthorized caller for cashout");
+        require(cashableTypeId > 0 && types[_tokenId] == cashableTypeId, "HN: token is not cashable");
+        _burn(_tokenId);
+        if(cashoutToken != address(0)) {
+            IERC20(cashoutToken).transfer(msg.sender, cashoutReward);
+        } else {
+            msg.sender.transfer(cashoutReward);
+        }
     }
 
     //
@@ -72,6 +100,22 @@ contract HuntNft is ERC721, ERC721Metadata("Emoji Hunt", "HUNT"), Ownable {
     {
         possibleCombinations[_typeId1][_typeId2] = _resultingTypeId;
     }
+
+    function setCashout(
+        address _token,
+        uint256 _reward,
+        uint256 _cashableTypeId
+    )
+        external
+        onlyOwner
+    {
+        cashoutReward = _reward;
+        cashoutToken = _token;
+        cashableTypeId = _cashableTypeId;
+    }
+
+    function() external payable {}
+
 
     //
     // Internal Methods
