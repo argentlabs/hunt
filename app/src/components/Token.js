@@ -19,17 +19,19 @@ class Token extends Component {
     }
 
     async componentDidMount() {
-        let image, targetImage;
+        let image, target;
 		if(this.props.uri) {
             image = await this.getImage(this.props.uri); console.log(image);
+            this.setState({
+                image
+            });
         }
         if(this.props.match) {
-            targetImage = await this.getImage(this.props.match);console.log(targetImage);
+            target = await this.getImage(this.props.match);console.log(target);
+            this.setState({
+                target
+            });
         }
-        this.setState({
-            image,
-            targetImage
-        });
     }
 
     handleInputChange = event => { 
@@ -44,10 +46,14 @@ class Token extends Component {
     onMatch = async () => { 
         let nav = 'Android';//navigator.userAgent;
         if(!nav.includes('Android') && !nav.includes('iPhone')) {
-            this.props.onError(new Error('You need to use a mobile phone to play'));
+            this.props.onError(new Error('EmojiHunt can only be played on Mobile.'));
             return;
         }
         let targetAddress = await this.state.provider.resolveName(this.state.targetEns); 
+        if(!targetAddress) {
+            this.props.onError(new Error('You need to match with another Argent user.'));
+            return;
+        }
         let url = `${ARGENT_URL}/app/ah_requestMerge?to=${targetAddress}&contract=${NFT_CONTRACT}&ens=${this.state.targetEns}&id=${this.state.id}`
         window.open(url, '_self');
     }
@@ -67,7 +73,7 @@ class Token extends Component {
             }
 
             const data = await response.json(); 
-            return {'icon': data.properties.image.description, 'twitter': data.properties.image.twitter};
+            return {'icon': data.properties.image.description, 'twitter': data.properties.twitter.description};
         } catch (er) {
             this.props.onError(new Error('Error while loading the image'));
             return;
@@ -90,7 +96,7 @@ class Token extends Component {
                     </div>
                 </div>
 
-                <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" className="twitter-share-button" data-size="large" data-text={`Let&#39;s both win 500 #DAI! I have ${this.state.image.twitter} and need ${this.state.target.icon}`} data-url="https://emojihunt.argent.xyz" data-hashtags="emojihunt" data-show-count="false">Tweet</a>
+                <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" className="twitter-share-button" data-size="large" data-text={this.state.image && this.state.target ? `Let&#39;s both win 500 #DAI! I have ${this.state.image.twitter} and need ${this.state.target.twitter}` : null} data-url="https://emojihunt.argent.xyz" data-hashtags="emojihunt" data-show-count="false">Tweet</a>
 
                 <div className="form-group">
                     <div className="input-group">
