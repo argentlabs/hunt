@@ -60,13 +60,13 @@ class Signin extends Component {
                 const data = await response.json(); 
                 switch(data.message) {
                     case 'ensNotRegistered':
-                        this.props.onError(new Error('Please download Argent first, then try again'));
+                        this.props.onError(new Error('Please download Argent first, then try again.'));
                         break;
                     case 'ensMalformedOrTooShort':
-                        this.props.onError(new Error('ENS incorrect'));
+                        this.props.onError(new Error('Your ENS is incorrect, please use a valid Argent ENS.'));
                         break;
                     default:
-                        this.props.onError(new Error('Unknown server error'));
+                        this.props.onError(new Error('Ooops, something unexpected happened... try again later.'));
                 }
                 this.setState({isRegistering: false});
                 return;

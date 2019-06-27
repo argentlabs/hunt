@@ -88,7 +88,9 @@ class Token extends Component {
 
     render() {
         const {
-            isMatching
+            isMatching,
+            image,
+            target
         } = this.state;
         return (
             <React.Fragment>
@@ -96,17 +98,18 @@ class Token extends Component {
                 <div className="emojis">
                     <div className="you-have">
                     <h4>You have</h4>
-                        <img src={this.state.image? this.state.image.icon : null} alt="The Emoji NFT you have" />
+                        <img src={image? image.icon : null} alt="The Emoji NFT you have" />
                     </div>
 
                     <div className="you-need">
                     <h4>You need</h4>
-                        <img src={this.state.target ? this.state.target.icon : null} alt="The Emoji NFT you need" />
+                        <img src={target ? target.icon : null} alt="The Emoji NFT you need" />
                     </div>
                 </div>
-
-                <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" className="twitter-share-button" data-size="large" data-text={this.state.image && this.state.target ? `Let&#39;s both win 500 #DAI! I have ${this.state.image.twitter} and need ${this.state.target.twitter}` : null} data-url="https://emojihunt.argent.xyz" data-hashtags="emojihunt" data-show-count="false">Tweet</a>
-
+                {image && target ? (
+                    <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" className="twitter-share-button" data-size="large" data-text={`Let's both win 500 #DAI! I have ${image.twitter} and need ${target.twitter}`} data-url="https://emojihunt.argent.xyz" data-hashtags="emojihunt" data-show-count="false">Find a match on Twitter</a>
+                ) : null }
+                
                 <div className="form-group">
                     <div className="input-group">
                     <input name="targetEns" type="text" className="form-control form-text" placeholder="username" onChange={this.handleInputChange}/>
