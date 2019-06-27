@@ -11,7 +11,8 @@ class Token extends Component {
             image: null,
             target: null,
             targetEns: null,
-            provider: props.provider
+            provider: props.provider,
+            isMatching: false
         }
     }
 
@@ -41,18 +42,22 @@ class Token extends Component {
     }
 
     onMatch = async () => { 
+        this.setState({isMatching: true});
         let nav = 'Android';//navigator.userAgent;
         if(!nav.includes('Android') && !nav.includes('iPhone')) {
             this.props.onError(new Error('EmojiHunt can only be played on Mobile.'));
+            this.setState({isMatching: false});
             return;
         }
         let targetAddress = await this.state.provider.resolveName(this.state.targetEns); 
         if(!targetAddress) {
             this.props.onError(new Error('You need to match with another Argent user.'));
+            this.setState({isMatching: false});
             return;
         }
         let url = `${process.env.REACT_APP_ARGENT_URL}/app/ah_requestMerge?to=${targetAddress}&contract=${process.env.REACT_APP_NFT_CONTRACT}&ens=${this.state.targetEns}&id=${this.state.id}`
         window.open(url, '_self');
+        this.setState({isMatching: false});
     }
 
     getImage = async (url) => {
@@ -78,6 +83,9 @@ class Token extends Component {
     }
 
     render() {
+        const {
+            isMatching
+        } = this.state;
         return (
             <React.Fragment>
                 <div className="how-to-play__box">
@@ -102,7 +110,7 @@ class Token extends Component {
                     <div className="input-group-append">{process.env.REACT_APP_ARGENT_ENS}</div>
                     </div>
                 </div>
-                <button className="button" onClick={this.onMatch}>Match</button>
+                <button className="button" disabled={isMatching} onClick={!isMatching? this.onMatch : null}>{isMatching ? 'Matching...' : 'Match'}</button>
                 </div>
             </React.Fragment>
 			

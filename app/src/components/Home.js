@@ -20,7 +20,7 @@ class Home extends Component {
         }
     }
 
-    async componentDidMount() { console.log(process.env.REACT_APP_NFT_CONTRACT);
+    async componentDidMount() { 
 		this.provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_INFURA_URL);
         this.nftContract = new ethers.Contract(process.env.REACT_APP_NFT_CONTRACT, ABI, this.provider);
     }

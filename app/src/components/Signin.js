@@ -15,8 +15,7 @@ class Signin extends Component {
     }
 
     componentDidMount = async () => {
-        console.log("nav " + navigator.userAgent);
-		this.startTimer();
+		//this.startTimer();
     }
 
     startTimer = () => {
