@@ -1,8 +1,5 @@
+import 'dotenv';
 import React, {Component} from 'react';
-
-const ARGENT_URL = "http://emojihunt.argent.xyz";
-const ARGENT_ENS = "argent.xyz";
-const NFT_CONTRACT = "0x05c566c8C651Eea2F5e64b8cf0cc7B853003e71c";
 
 class Token extends Component {
 
@@ -39,7 +36,7 @@ class Token extends Component {
         const value = target.value;
         const name = target.name;
         this.setState({
-            [name]: value + '.' + ARGENT_ENS
+            [name]: value + '.' + process.env.REACT_APP_ARGENT_ENS
         });
     }
 
@@ -54,7 +51,7 @@ class Token extends Component {
             this.props.onError(new Error('You need to match with another Argent user.'));
             return;
         }
-        let url = `${ARGENT_URL}/app/ah_requestMerge?to=${targetAddress}&contract=${NFT_CONTRACT}&ens=${this.state.targetEns}&id=${this.state.id}`
+        let url = `${process.env.REACT_APP_ARGENT_URL}/app/ah_requestMerge?to=${targetAddress}&contract=${process.env.REACT_APP_NFT_CONTRACT}&ens=${this.state.targetEns}&id=${this.state.id}`
         window.open(url, '_self');
     }
 
@@ -102,7 +99,7 @@ class Token extends Component {
                     <div className="input-group">
                     <input name="targetEns" type="text" className="form-control form-text" placeholder="username" onChange={this.handleInputChange}/>
 
-                    <div className="input-group-append">.argent.xyz</div>
+                    <div className="input-group-append">{process.env.REACT_APP_ARGENT_ENS}</div>
                     </div>
                 </div>
                 <button className="button" onClick={this.onMatch}>Match</button>

@@ -15,5 +15,8 @@
     "testrpc": "ganache-cli",
     "coverage": "truffle-coverage",
     "lint": "solhint contracts/**/*.sol"
+  },
+  "dependencies": {
+    "dotenv": "^8.0.0"
   }
 }

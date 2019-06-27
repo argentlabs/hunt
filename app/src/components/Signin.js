@@ -1,8 +1,5 @@
+import 'dotenv';
 import React, {Component} from 'react';
-import {Button, InputGroup, InputGroupAddon, Input} from 'reactstrap';
-
-const ARGENT_ENS = "argent.xyz";
-const BACKEND_URL = "https://cloud-test.argent-api.com/v1/hunt";
 
 class Signin extends Component {
 
@@ -55,17 +52,17 @@ class Signin extends Component {
         const value = target.value;
         const name = target.name;
         this.setState({
-            [name]: value + '.' + ARGENT_ENS
+            [name]: value + '.' + process.env.REACT_APP_ARGENT_ENS
         });
     }
 
     onRegister = async () => { 
         this.setState({isRegistering: true});
         if(!this.state.ens) {
-            this.state.ens = ARGENT_ENS;
+            this.state.ens = process.env.REACT_APP_ARGENT_ENS;
         }
         try {
-            const response  = await fetch(BACKEND_URL, {
+            const response  = await fetch(process.env.REACT_APP_BACKEND_URL, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -148,7 +145,7 @@ class Signin extends Component {
                             <h5>Enter your Argent username (ENS)</h5>
                             <div className="input-group">
                                 <input name="ens" type="text" className="form-control form-text" placeholder="username" onChange={this.handleInputChange}/>
-                                <div className="input-group-append">.argent.xyz</div>
+                                <div className="input-group-append">{process.env.REACT_APP_ARGENT_ENS}</div>
                             </div>
                         </div>
 
@@ -157,19 +154,6 @@ class Signin extends Component {
 
                 </main>
             </React.Fragment>
-            
-
-
-      
-
-
-                // <div className="form-group">
-                //     <label htmlFor="walletEns">Enter your Argent username</label>
-                //     <InputGroup className="search-ens">
-                //         <Input name="ens" className="form-search" id="ens" placeholder={`username.${ARGENT_ENS}`} onChange={this.handleInputChange} autoFocus/>
-                //         <InputGroupAddon addonType="append"><Button onClick={this.onRegister}>{'Register'}</Button></InputGroupAddon>
-                //     </InputGroup>
-                // </div> 
         );
     }
 }

@@ -1,11 +1,9 @@
+import 'dotenv';
 import React, {Component} from 'react';
 import Signin from './Signin';
 import Token from './Token';
 import { ethers } from 'ethers';
 import ABI from './abi.json';
-
-const RPC_URL = "https://ropsten.infura.io/v3/18a84d2ce0d94715a61a35a7717c4086";
-const NFT_CONTRACT = "0x05c566c8C651Eea2F5e64b8cf0cc7B853003e71c";
 
 class Home extends Component {
 
@@ -22,9 +20,9 @@ class Home extends Component {
         }
     }
 
-    async componentDidMount() {
-		this.provider = new ethers.providers.JsonRpcProvider(RPC_URL);
-        this.nftContract = new ethers.Contract(NFT_CONTRACT, ABI, this.provider);
+    async componentDidMount() { console.log(process.env.REACT_APP_NFT_CONTRACT);
+		this.provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_INFURA_URL);
+        this.nftContract = new ethers.Contract(process.env.REACT_APP_NFT_CONTRACT, ABI, this.provider);
     }
 
     onRegistered = async (registeredEns) => { 
@@ -107,7 +105,7 @@ class Home extends Component {
                                 <div>
                                 <h2>Your Emojis</h2>
 
-                                {tokens.map( (token, index) => {
+                                {tokens.map( (token) => {
                                     return(
                                         <Token
                                             id={token.id}
