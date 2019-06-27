@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, InputGroup, InputGroupAddon, Input} from 'reactstrap';
+// import {Button, InputGroup, InputGroupAddon, Input} from 'reactstrap';
 
 const ARGENT_ENS = "argent.xyz";
 const BACKEND_URL = "https://cloud-test.argent-api.com/v1/hunt";
@@ -139,8 +139,8 @@ class Signin extends Component {
                         <div className="how-to-play__box">
                             <h5>Download Argent</h5>
                             <div className="app-store-buttons">
-                                <a href="#"><img src="assets/images/app-store.svg" alt="Download on the App Store" /></a>
-                                <a href="#"><img src="assets/images/google-play.svg" alt="Download on Google Play" /></a>
+                                <a href="http://argent.app.link"><img src="assets/images/app-store.svg" alt="Download on the App Store" /></a>
+                                <a href="http://argent.app.link"><img src="assets/images/google-play.svg" alt="Download on Google Play" /></a>
                             </div>
                         </div>
 

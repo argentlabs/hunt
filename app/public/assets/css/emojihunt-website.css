@@ -221,10 +221,9 @@
   justify-content: space-around;
 }
 
-.how-to-play__box .you-have,
-.how-to-play__box .you-need {
-  text-align: center;
-  font-size: 6em;
+.how-to-play__box .you-have img,
+.how-to-play__box .you-need img {
+  max-width: 120px;
 }
 
 .your-emojis {
