@@ -1,11 +1,9 @@
+import 'dotenv';
 import React, {Component} from 'react';
 import Signin from './Signin';
 import Token from './Token';
 import { ethers } from 'ethers';
-
-const RPC_URL = "";
-const NFT_CONTRACT = "";
-const ABI = [];
+import ABI from './abi.json';
 
 class Home extends Component {
 
@@ -16,32 +14,46 @@ class Home extends Component {
         this.nftContract = null;
         this.state = {
             walletEns: null,
+            walletAddress: null,
             isRegistered: false,
             tokens: []
         }
     }
 
-    async componentDidMount() {
-		this.provider = new ethers.providers.JsonRpcProvider(RPC_URL);
-		this.nftContract = new ethers.Contract(NFT_CONTRACT, ABI, this.provider);
-	}
+    async componentDidMount() { 
+		this.provider = new ethers.providers.JsonRpcProvider(process.env.REACT_APP_INFURA_URL);
+        this.nftContract = new ethers.Contract(process.env.REACT_APP_NFT_CONTRACT, ABI, this.provider);
+    }
 
-    onRegistered = async (value) => {
+    onRegistered = async (registeredEns) => { 
+        let registeredAddress = await this.provider.resolveName(registeredEns);
         this.setState({
             isRegistered: true,
-            walletEns: value
+            walletEns: registeredEns,
+            walletAddress: registeredAddress
         });
         this.findTokens();
     }
 
     findTokens = async () => {
+
+        let tokens = [];
+        let balance = await this.nftContract.functions.balanceOf(this.state.walletAddress);
+    
+        for(let i = 0; i < balance; i++) {
+            let tokenId = await this.nftContract.functions.tokenOfOwnerByIndex(this.state.walletAddress, i);
+            let tokenUri = await this.nftContract.functions.tokenURI(tokenId);
+            let matchUri = await this.nftContract.functions.dualTokenURI(tokenId);
+            tokens.push({
+                'id': parseInt(tokenId), 
+                'uri': tokenUri,
+                'match': matchUri
+            });
+        }
+        console.log(tokens);
         this.setState({
-            tokens : [
-                {"id":"1", "state": "available"},
-                {"id":"1", "state": "available"},
-                {"id":"3", "state": "available"}
-                ]
-        })
+            tokens
+        });
     }
 
     render() {
@@ -49,41 +61,70 @@ class Home extends Component {
             isRegistered,
             walletEns,
             tokens
-        } = this.state;
+            } = this.state;
         return (
             <React.Fragment>
-               <div class="logo-wrapper">
-                    <h1 class="logo"><a href="#" class="text-hide">EmojiHunt</a></h1>
+               <div className="logo-wrapper">
+                    <h1 className="logo"><a href="https://emojihunt.xyz" className="text-hide">EmojiHunt</a></h1>
                 </div>
 
-                <div class="win-wrapper">
-                    <img src="assets/images/win-circle.svg" class="win-circle" alt="Win 500 DAI" />
+                <div className="win-wrapper">
+                    <img src="assets/images/win-circle.svg" className="win-circle" alt="Win 500 DAI" />
 
-                    <img src="assets/images/animations/unicorn.gif" class="emoji-unicorn" alt="Unicorn Emoji" />
+                    <img src="assets/images/animations/unicorn.gif" className="emoji-unicorn" alt="Unicorn Emoji" />
 
-                    <p class="prize-amount medium">
+                    <p className="prize-amount medium">
                         $500
-                        <img src="assets/images/icon-dai.svg" class="icon-dai" alt="DAI icon" />
+                        <img src="assets/images/icon-dai.svg" className="icon-dai" alt="DAI icon" />
                     </p>
-                    <p class="prize-currency h2 regular">in DAI</p>
+                    <p className="prize-currency h2 regular">in DAI</p>
                 </div>
                 { isRegistered ? (
-                <div>
-                    <p>
-                        Hello {walletEns}
-                    </p>
-                    <ul>
-                        {tokens.map( (token, index) => {
-                            return(
-                                <li>
-                                    <Token id={token.id} state={token.state}/>
-                                </li>
-                            )
-                        })}
-                    </ul>
-                </div>
+                <React.Fragment>
+                    <main>
+
+                        <div className="win-or-lose">
+                            <img src="assets/images/animations/winner-cup.gif" className="emoji-winner-cup" alt="Winner cup emoji" />
+                            <img src="assets/images/animations/flying-cash.gif" className="emoji-flying-cash" alt="Flying cash" />
+                        </div>
+
+                        <div className="your-emojis">
+
+                            <h3 className="hello-ens">Hello {walletEns}</h3>
+
+                            <div className="blue-box instructions">
+                                <h4>How to play</h4>
+
+                                <p>Find someone else with the emoji you need</p>
+                                <p>Enter each other's Argent usernames, combine emojis and move to the next round!</p>
+                                <p className="small">We don't advise you share your ENS publicly.</p>
+                            </div>
+                            {tokens.length === 0 ? (
+                                <h2>Your Emojis will appear shortly</h2>
+                            ) : (
+                                <div>
+                                <h2>Your Emojis</h2>
+
+                                {tokens.map( (token) => {
+                                    return(
+                                        <Token
+                                            id={token.id}
+                                            uri={token.uri}
+                                            match={token.match}
+                                            provider={this.provider}
+                                            onError={this.props.onError}/>
+                                    )
+                                })}
+                                </div>
+                            )}
+                            
+
+                        </div>
+                    </main>
+
+                </React.Fragment>
                 ) : (
-                    <Signin onRegistered={this.onRegistered}/>
+                    <Signin onRegistered={this.onRegistered} onError={this.props.onError}/>
                 )} 
             </React.Fragment>
         );
