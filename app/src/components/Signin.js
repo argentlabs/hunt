@@ -78,13 +78,13 @@ class Signin extends Component {
                 const data = await response.json(); 
                 switch(data.message) {
                     case 'ensNotRegistered':
-                        this.props.onError(new Error('You need to download Argent'));
+                        this.props.onError(new Error('Please download Argent first, then try again'));
                         break;
                     case 'ensMalformedOrTooShort':
-                        this.props.onError(new Error('ENS malformed'));
+                        this.props.onError(new Error('ENS incorrect'));
                         break;
                     default:
-                        this.props.onError(new Error('Unknown backend error'));
+                        this.props.onError(new Error('Unknown server error'));
                 }
                 this.setState({isRegistering: false});
                 return;
@@ -93,7 +93,7 @@ class Signin extends Component {
             this.props.onRegistered(this.state.ens);
 
         } catch (er) {
-            this.props.onError(new Error('Error while contacting the backend'));
+            this.props.onError(new Error('Error while contacting server'));
             this.setState({isRegistering: true});
             return;
         }
@@ -145,14 +145,14 @@ class Signin extends Component {
                         </div>
 
                         <div className="how-to-play__box ethereum-address">
-                            <h5>Enter your address</h5>
+                            <h5>Enter your Argent username (ENS)</h5>
                             <div className="input-group">
                                 <input name="ens" type="text" className="form-control form-text" placeholder="username" onChange={this.handleInputChange}/>
                                 <div className="input-group-append">.argent.xyz</div>
                             </div>
                         </div>
 
-                        <button className="button" disabled={isRegistering} onClick={!isRegistering? this.onRegister : null}>{isRegistering? "Registering..." : "Get rich or DAI trying"}</button>
+                        <button className="button" disabled={isRegistering} onClick={!isRegistering? this.onRegister : null}>{isRegistering? "One moment…" : "Get rich or DAI trying"}</button>
                     </div> 
 
                 </main>
