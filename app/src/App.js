@@ -24,7 +24,6 @@ class App extends Component {
 		} = this.state;
 		return (
 			<div className="App">
-			<main>
 				{error ? ( 
 				<Modal isOpen={true} toggle={this.onCloseError} className={this.props.className}>
 					<ModalHeader toggle={this.onCloseError}>{error.title}</ModalHeader>
@@ -32,7 +31,6 @@ class App extends Component {
 				</Modal>) 
 				: null }
 				<Home onError={this.handleError}/>
-			</main>
 			</div>
 	  	);
 	}

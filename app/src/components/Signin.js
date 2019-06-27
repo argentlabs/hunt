@@ -10,13 +10,15 @@ class Signin extends Component {
         super(props);
 
         this.state = {
-            ens: null
+            ens: null,
+            isRegistering: false
         }
 
         this.timerId = null;
     }
 
     async componentDidMount() {
+        console.log("nav " + navigator.userAgent);
 		//this.startTimer();
     }
 
@@ -58,6 +60,7 @@ class Signin extends Component {
     }
 
     onRegister = async () => { 
+        this.setState({isRegistering: true});
         try {
             const response  = await fetch(BACKEND_URL, {
                 method: 'POST',
@@ -80,18 +83,23 @@ class Signin extends Component {
                     default:
                         this.props.onError(new Error('Unknown backend error'));
                 }
+                this.setState({isRegistering: false});
                 return;
             }
-    
+            
             this.props.onRegistered(this.state.ens);
 
         } catch (er) {
             this.props.onError(new Error('Error while contacting the backend'));
+            this.setState({isRegistering: true});
             return;
         }
     }
 
     render() {
+        const {
+            isRegistering
+        } = this.state;
         return (
             <React.Fragment>
                 <main>
@@ -141,7 +149,7 @@ class Signin extends Component {
                             </div>
                         </div>
 
-                        <button className="button" onClick={this.onRegister}>Get rich or DAI trying</button>
+                        <button className="button" disabled={isRegistering} onClick={!isRegistering? this.onRegister : null}>{isRegistering? "Registering..." : "Get rich or DAI trying"}</button>
                     </div> 
 
                 </main>

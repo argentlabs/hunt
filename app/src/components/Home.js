@@ -2,30 +2,10 @@ import React, {Component} from 'react';
 import Signin from './Signin';
 import Token from './Token';
 import { ethers } from 'ethers';
+import ABI from './abi.json';
 
 const RPC_URL = "https://ropsten.infura.io/v3/18a84d2ce0d94715a61a35a7717c4086";
-const NFT_CONTRACT = "0xa6d1AD05EcF47a627c4950a3069C57d24846cB43";
-const ABI = [
-    {
-        "constant": true,
-        "inputs": [
-          {
-            "name": "owner",
-            "type": "address"
-          }
-        ],
-        "name": "balanceOf",
-        "outputs": [
-          {
-            "name": "",
-            "type": "uint256"
-          }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-      }
-];
+const NFT_CONTRACT = "0x4564F46670707cB37278ca09e856aF0792573A7A";
 
 class Home extends Component {
 
@@ -48,7 +28,6 @@ class Home extends Component {
     }
 
     onRegistered = async (registeredEns) => { 
-        console.log("registered ENS " + registeredEns );
         let registeredAddress = await this.provider.resolveName(registeredEns);
         this.setState({
             isRegistered: true,
@@ -60,21 +39,23 @@ class Home extends Component {
 
     findTokens = async () => {
 
+        let tokens = [];
         let balance = await this.nftContract.functions.balanceOf(this.state.walletAddress);
-        console.log(balance);
     
         for(let i = 0; i < balance; i++) {
-            let tokenId = await this.nftContract.methods.tokenOfOwnerByIndex(this.state.walletAddress, i);
-            console.log(tokenId);
+            let tokenId = await this.nftContract.functions.tokenOfOwnerByIndex(this.state.walletAddress, i);
+            let tokenUri = await this.nftContract.functions.tokenURI(tokenId);
+            let matchUri = await this.nftContract.functions.dualTokenURI(tokenId);
+            tokens.push({
+                'id': parseInt(tokenId), 
+                'uri': tokenUri,
+                'match': matchUri
+            });
         }
-
+        console.log(tokens);
         this.setState({
-            tokens : [
-                {"id":"1", "state": "available"},
-                {"id":"1", "state": "available"},
-                {"id":"3", "state": "available"}
-                ]
-        })
+            tokens
+        });
     }
 
     render() {
@@ -82,7 +63,7 @@ class Home extends Component {
             isRegistered,
             walletEns,
             tokens
-        } = this.state;
+            } = this.state;
         return (
             <React.Fragment>
                <div className="logo-wrapper">
@@ -101,20 +82,43 @@ class Home extends Component {
                     <p className="prize-currency h2 regular">in DAI</p>
                 </div>
                 { isRegistered ? (
-                <div>
-                    <p>
-                        Hello {walletEns}
-                    </p>
-                    <ul>
+                <React.Fragment>
+                    <div>
+                        <p>
+                            Hello {walletEns}
+                        </p>
+                    </div>
+
+                    <div className="win-or-lose">
+                        <img src="assets/images/animations/winner-cup.gif" className="emoji-winner-cup" alt="Winner cup emoji" />
+                        <img src="assets/images/animations/flying-cash.gif" className="emoji-flying-cash" alt="Flying cash" />
+                    </div>
+
+                    <div className="your-emojis">
+
+                        <div className="instructions">
+                        <h4>How to play</h4>
+
+                        <p>Find someone else with the emoji you need</p>
+                        <p>Enter each other's Argent usernames, combine emojis and move to the next round!</p>
+                        <p className="small">We don't advise you share your ENS publicly.</p>
+                        </div>
+
+                        <h2>Your Emojis</h2>
+
                         {tokens.map( (token, index) => {
                             return(
-                                <li>
-                                    <Token id={token.id} state={token.state}/>
-                                </li>
+                                <Token 
+                                id={token.id} 
+                                uri={token.uri} 
+                                match={token.match} 
+                                provider={this.provider}
+                                onError={this.props.onError}/>
                             )
                         })}
-                    </ul>
-                </div>
+
+                    </div>
+                </React.Fragment>
                 ) : (
                     <Signin onRegistered={this.onRegistered} onError={this.props.onError}/>
                 )} 
