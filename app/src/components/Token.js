@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-const ARGENT_URL = "";
+const ARGENT_URL = "emojihunt.argent.xyz";
 const ARGENT_ENS = "argent.xyz";
 const NFT_CONTRACT = "0x4564F46670707cB37278ca09e856aF0792573A7A";
 
@@ -11,16 +11,26 @@ class Token extends Component {
 
         this.state = {
             id: props.id,
-            uri: props.uri,
-            match: props.match,
+            image: null,
+            target: null,
             targetEns: null,
             provider: props.provider
         }
     }
 
-    // async componentDidMount() {
-		
-    // }
+    async componentDidMount() {
+        let image, targetImage;
+		if(this.props.uri) {
+            image = await this.getImage(this.props.uri);
+        }
+        if(this.props.match) {
+            targetImage = await this.getImage(this.props.match);
+        }
+        this.setState({
+            image,
+            targetImage
+        });
+    }
 
     handleInputChange = event => { 
         const target = event.target;
@@ -32,14 +42,36 @@ class Token extends Component {
     }
 
     onMatch = async () => {
-        let nav = navigator.userAgent;
+        let nav = 'Android';//navigator.userAgent;
         if(!nav.includes('Android') && !nav.includes('iPhone')) {
             this.props.onError(new Error('You can only match your token on a mobile phone'));
             return;
         }
-        let targetAddress = await this.state.provider.resolveName(this.state.targetEns);
+        let targetAddress = await this.state.provider.resolveName(this.state.targetEns); console.log(targetAddress);
         let url = `${ARGENT_URL}/app/ah_requestMerge?to=${targetAddress}&contract=${NFT_CONTRACT}&ens=${this.state.targetEns}&id=${this.state.id}`
         window.open(url, '_blank');
+    }
+
+    getImage = async (url) => {
+        try {
+            const response  = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok !== true) { 
+                this.props.onError(new Error(`Unkown token ${url}`));
+            }
+
+            const data = await response.json(); 
+            return data.image.description;
+        } catch (er) {
+            this.props.onError(new Error('Error while loading the image'));
+            return;
+        }
     }
 
     render() {
@@ -67,7 +99,7 @@ class Token extends Component {
                     <div className="input-group-append">.argent.xyz</div>
                     </div>
                 </div>
-                <button className="button" onClick={this.onMatch}>Match</button>
+                <button className="button" onClick={this.onMatch} onChange={this.handleInputChange}>Match</button>
                 </div>
             </React.Fragment>
 			
