@@ -35,7 +35,6 @@ pipeline {
             steps {
                 withAWS(region: 'eu-west-1', role:'Terraform', roleAccount: "${env.AWS_ACCOUNT_ID}") {
                     script {
-                        sh "cd /app"
                         sh "npm install"
                         sh "REACT_APP_ENV=${params.WORKSPACE} npm run build"
 
