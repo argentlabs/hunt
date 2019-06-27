@@ -32,6 +32,10 @@ class Token extends Component {
         }
     }
 
+    componentDidUpdate() {
+        window.twttr.widgets.load();
+    }
+
     handleInputChange = event => { 
         const target = event.target;
         const value = target.value;
