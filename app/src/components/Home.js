@@ -105,14 +105,15 @@ class Home extends Component {
                                 <div>
                                 <h2>Your Emojis</h2>
 
-                                {tokens.map( (token) => {
+                                {tokens.map( (token, index) => {
                                     return(
                                         <Token
                                             id={token.id}
                                             uri={token.uri}
                                             match={token.match}
                                             provider={this.provider}
-                                            onError={this.props.onError}/>
+                                            onError={this.props.onError}
+                                            key={index}/>
                                     )
                                 })}
                                 </div>
