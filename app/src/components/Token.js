@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 
-const ARGENT_URL = "emojihunt.argent.xyz";
+const ARGENT_URL = "http://emojihunt.argent.xyz";
 const ARGENT_ENS = "argent.xyz";
-const NFT_CONTRACT = "0x4564F46670707cB37278ca09e856aF0792573A7A";
+const NFT_CONTRACT = "0x05c566c8C651Eea2F5e64b8cf0cc7B853003e71c";
 
 class Token extends Component {
 
@@ -21,10 +21,10 @@ class Token extends Component {
     async componentDidMount() {
         let image, targetImage;
 		if(this.props.uri) {
-            image = await this.getImage(this.props.uri);
+            image = await this.getImage(this.props.uri); console.log(image);
         }
         if(this.props.match) {
-            targetImage = await this.getImage(this.props.match);
+            targetImage = await this.getImage(this.props.match);console.log(targetImage);
         }
         this.setState({
             image,
@@ -41,15 +41,15 @@ class Token extends Component {
         });
     }
 
-    onMatch = async () => {
+    onMatch = async () => { 
         let nav = 'Android';//navigator.userAgent;
         if(!nav.includes('Android') && !nav.includes('iPhone')) {
             this.props.onError(new Error('You can only match your token on a mobile phone'));
             return;
         }
-        let targetAddress = await this.state.provider.resolveName(this.state.targetEns); console.log(targetAddress);
+        let targetAddress = await this.state.provider.resolveName(this.state.targetEns); 
         let url = `${ARGENT_URL}/app/ah_requestMerge?to=${targetAddress}&contract=${NFT_CONTRACT}&ens=${this.state.targetEns}&id=${this.state.id}`
-        window.open(url, '_blank');
+        window.open(url, '_self');
     }
 
     getImage = async (url) => {
@@ -67,7 +67,7 @@ class Token extends Component {
             }
 
             const data = await response.json(); 
-            return data.image.description;
+            return {'icon': data.properties.image.description, 'twitter': data.properties.image.twitter};
         } catch (er) {
             this.props.onError(new Error('Error while loading the image'));
             return;
@@ -81,25 +81,25 @@ class Token extends Component {
                 <div className="emojis">
                     <div className="you-have">
                     <h4>You have</h4>
-                    🎉
+                        <img src={this.state.image? this.state.image.icon : null}/>
                     </div>
 
                     <div className="you-need">
                     <h4>You need</h4>
-                    🤠
+                        <img src={this.state.target ? this.state.target.icon : null}/>
                     </div>
                 </div>
 
-                <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" className="twitter-share-button" data-size="large" data-text="Let&#39;s both win 500 #DAI! I have 🎉 and need 🤠" data-url="https://emojihunt.argent.xyz" data-hashtags="emojihunt" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" className="twitter-share-button" data-size="large" data-text={`Let&#39;s both win 500 #DAI! I have ${this.state.image.twitter} and need ${this.state.target.icon}`} data-url="https://emojihunt.argent.xyz" data-hashtags="emojihunt" data-show-count="false">Tweet</a>
 
                 <div className="form-group">
                     <div className="input-group">
-                    <input name="targetEns" type="text" className="form-control form-text" placeholder="username"/>
+                    <input name="targetEns" type="text" className="form-control form-text" placeholder="username" onChange={this.handleInputChange}/>
 
                     <div className="input-group-append">.argent.xyz</div>
                     </div>
                 </div>
-                <button className="button" onClick={this.onMatch} onChange={this.handleInputChange}>Match</button>
+                <button className="button" onClick={this.onMatch}>Match</button>
                 </div>
             </React.Fragment>
 			

@@ -5,7 +5,7 @@ import { ethers } from 'ethers';
 import ABI from './abi.json';
 
 const RPC_URL = "https://ropsten.infura.io/v3/18a84d2ce0d94715a61a35a7717c4086";
-const NFT_CONTRACT = "0x4564F46670707cB37278ca09e856aF0792573A7A";
+const NFT_CONTRACT = "0x05c566c8C651Eea2F5e64b8cf0cc7B853003e71c";
 
 class Home extends Component {
 
@@ -101,19 +101,25 @@ class Home extends Component {
                                 <p>Enter each other's Argent usernames, combine emojis and move to the next round!</p>
                                 <p className="small">We don't advise you share your ENS publicly.</p>
                             </div>
+                            {tokens.length === 0 ? (
+                                <h2>Your Emojis will appear shortly</h2>
+                            ) : (
+                                <div>
+                                <h2>Your Emojis</h2>
 
-                            <h2>Your Emojis</h2>
-
-                            {tokens.map( (token, index) => {
-                                return(
-                                    <Token
-                                        id={token.id}
-                                        uri={token.uri}
-                                        match={token.match}
-                                        provider={this.provider}
-                                        onError={this.props.onError}/>
-                                )
-                            })}
+                                {tokens.map( (token, index) => {
+                                    return(
+                                        <Token
+                                            id={token.id}
+                                            uri={token.uri}
+                                            match={token.match}
+                                            provider={this.provider}
+                                            onError={this.props.onError}/>
+                                    )
+                                })}
+                                </div>
+                            )}
+                            
 
                         </div>
                     </main>

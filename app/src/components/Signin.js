@@ -17,16 +17,16 @@ class Signin extends Component {
         this.timerId = null;
     }
 
-    async componentDidMount() {
+    componentDidMount = async () => {
         console.log("nav " + navigator.userAgent);
-		//this.startTimer();
+		this.startTimer();
     }
 
     startTimer = () => {
         var countDownDate = new Date("July 26, 2019 24:00:00").getTime();
 
         if(!this.timerId) {
-            this.timerId = setInterval(function() {
+            this.timerId = setInterval(() => {
                 var now = new Date().getTime();
                 var distance = countDownDate - now;
             
@@ -61,6 +61,9 @@ class Signin extends Component {
 
     onRegister = async () => { 
         this.setState({isRegistering: true});
+        if(!this.state.ens) {
+            this.state.ens = ARGENT_ENS;
+        }
         try {
             const response  = await fetch(BACKEND_URL, {
                 method: 'POST',
