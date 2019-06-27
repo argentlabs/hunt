@@ -108,7 +108,7 @@ class Signin extends Component {
                         <img src="assets/images/animations/flying-cash.gif" className="emoji-flying-cash" alt="Flying cash" />
                     </div>
 
-                    <div className="countdown">
+                    <div className="blue-box countdown">
                         <h4>Starts in</h4>
 
                         <div className="timer">
@@ -131,7 +131,7 @@ class Signin extends Component {
 
 
                     <div className="how-to-play">
-                        <h2>How to play</h2>
+                        <h2>Join the game!</h2>
 
                         <div className="how-to-play__box">
                             <h5>Download Argent</h5>

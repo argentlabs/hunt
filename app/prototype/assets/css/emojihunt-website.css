@@ -112,10 +112,8 @@
 
 
 /* Countdown */
-.instructions,
-.instructions > h4,
-.countdown,
-.countdown > h4 {
+.blue-box,
+.blue-box > h4 {
   position: relative;
   background-color: var(--emojihunt-blue);
   color: #ffffff;
@@ -125,12 +123,7 @@
   margin-bottom: 40px;
 }
 
-.countdown > h1 {
-  margin: 0;
-}
-
-.countdown > h4,
-.instructions > h4 {
+.blue-box > h4 {
   min-width: 140px;
   position: absolute;
   top: -20px;
@@ -166,8 +159,7 @@
 
 
 /* How to play */
-.how-to-play h2,
-.your-emojis h2 {
+.how-to-play h2 {
   position: relative;
   text-align: center;
   color: var(--argent-dark-charcoal);
@@ -224,15 +216,6 @@
 }
 
 
-.how-to-play .button,
-.how-to-play__box .button {
-  display: block;
-  width: 100%;
-  padding: 16px 24px;
-  font-weight: 600;
-  background-color: var(--emojijunt-pink);
-}
-
 .how-to-play__box .emojis {
   display: flex;
   justify-content: space-around;
@@ -250,4 +233,24 @@
 
 .instructions p:last-child {
   margin-bottom: 0;
+}
+
+
+
+.button {
+  display: block;
+  width: 100%;
+  padding: 16px 24px;
+  font-weight: 600;
+  background-color: var(--emojijunt-pink);
+}
+
+.button:focus,
+.button:hover {
+  background-color: #FFB8D1;
+}
+
+
+.button:active {
+  background-color: #FF7AAA;
 }

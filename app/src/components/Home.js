@@ -83,41 +83,41 @@ class Home extends Component {
                 </div>
                 { isRegistered ? (
                 <React.Fragment>
-                    <div>
-                        <p>
-                            Hello {walletEns}
-                        </p>
-                    </div>
+                    <main>
 
-                    <div className="win-or-lose">
-                        <img src="assets/images/animations/winner-cup.gif" className="emoji-winner-cup" alt="Winner cup emoji" />
-                        <img src="assets/images/animations/flying-cash.gif" className="emoji-flying-cash" alt="Flying cash" />
-                    </div>
-
-                    <div className="your-emojis">
-
-                        <div className="instructions">
-                        <h4>How to play</h4>
-
-                        <p>Find someone else with the emoji you need</p>
-                        <p>Enter each other's Argent usernames, combine emojis and move to the next round!</p>
-                        <p className="small">We don't advise you share your ENS publicly.</p>
+                        <div className="win-or-lose">
+                            <img src="assets/images/animations/winner-cup.gif" className="emoji-winner-cup" alt="Winner cup emoji" />
+                            <img src="assets/images/animations/flying-cash.gif" className="emoji-flying-cash" alt="Flying cash" />
                         </div>
 
-                        <h2>Your Emojis</h2>
+                        <div className="your-emojis">
 
-                        {tokens.map( (token, index) => {
-                            return(
-                                <Token 
-                                id={token.id} 
-                                uri={token.uri} 
-                                match={token.match} 
-                                provider={this.provider}
-                                onError={this.props.onError}/>
-                            )
-                        })}
+                            <h3 className="hello-ens">Hello {walletEns}</h3>
 
-                    </div>
+                            <div className="blue-box instructions">
+                                <h4>How to play</h4>
+
+                                <p>Find someone else with the emoji you need</p>
+                                <p>Enter each other's Argent usernames, combine emojis and move to the next round!</p>
+                                <p className="small">We don't advise you share your ENS publicly.</p>
+                            </div>
+
+                            <h2>Your Emojis</h2>
+
+                            {tokens.map( (token, index) => {
+                                return(
+                                    <Token
+                                        id={token.id}
+                                        uri={token.uri}
+                                        match={token.match}
+                                        provider={this.provider}
+                                        onError={this.props.onError}/>
+                                )
+                            })}
+
+                        </div>
+                    </main>
+
                 </React.Fragment>
                 ) : (
                     <Signin onRegistered={this.onRegistered} onError={this.props.onError}/>
