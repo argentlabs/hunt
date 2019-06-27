@@ -7,7 +7,9 @@
   "author": "olivier@argent.xyz",
   "license": "ISC",
   "devDependencies": {
-    "openzeppelin-solidity": "^2.3.0"
+    "dotenv": "^8.0.0",
+    "openzeppelin-solidity": "^2.3.0",
+    "truffle-hdwallet-provider": "^1.0.9"
   },
   "scripts": {
     "compile": "truffle compile",
@@ -17,6 +19,6 @@
     "lint": "solhint contracts/**/*.sol"
   },
   "dependencies": {
-    "dotenv": "^8.0.0"
+    "ganache-cli": "^6.4.4"
   }
 }
