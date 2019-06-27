@@ -34,7 +34,7 @@ class Token extends Component {
     onMatch = async () => {
         let nav = navigator.userAgent;
         if(!nav.includes('Android') && !nav.includes('iPhone')) {
-            this.props.onError(new Error('You can only match your token on a mobile phone'));
+            this.props.onError(new Error('You need to use a mobile phone to play'));
             return;
         }
         let targetAddress = await this.state.provider.resolveName(this.state.targetEns);
