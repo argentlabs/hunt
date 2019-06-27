@@ -84,12 +84,12 @@ class Token extends Component {
                 <div className="emojis">
                     <div className="you-have">
                     <h4>You have</h4>
-                        <img src={this.state.image? this.state.image.icon : null}/>
+                        <img src={this.state.image? this.state.image.icon : null} alt="The Emoji NFT you have" />
                     </div>
 
                     <div className="you-need">
                     <h4>You need</h4>
-                        <img src={this.state.target ? this.state.target.icon : null}/>
+                        <img src={this.state.target ? this.state.target.icon : null} alt="The Emoji NFT you need" />
                     </div>
                 </div>
 

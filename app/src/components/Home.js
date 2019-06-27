@@ -65,7 +65,7 @@ class Home extends Component {
         return (
             <React.Fragment>
                <div className="logo-wrapper">
-                    <h1 className="logo"><a href="#" className="text-hide">EmojiHunt</a></h1>
+                    <h1 className="logo"><a href="https://emojihunt.xyz" className="text-hide">EmojiHunt</a></h1>
                 </div>
 
                 <div className="win-wrapper">
