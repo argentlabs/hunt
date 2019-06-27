@@ -7,12 +7,14 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 import "openzeppelin-solidity/contracts/token/ERC721/ERC721.sol";
 import "openzeppelin-solidity/contracts/token/ERC721/ERC721Metadata.sol";
 import "openzeppelin-solidity/contracts/token/ERC721/ERC721Enumerable.sol";
+import "openzeppelin-solidity/contracts/token/ERC721/IERC721Receiver.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 
-contract HuntNft is ERC721, IERC721Metadata, ERC721Enumerable, Ownable {
+contract HuntNft is ERC721, IERC721Metadata, ERC721Enumerable, IERC721Receiver, Ownable {
 
     bytes4 constant internal MATCH_TOKEN_SIG = bytes4(keccak256("matchToken(uint256,address)"));
+    bytes4 constant internal NFT_RECEIVED_SIG = bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"));
     string constant public name = "Emoji Hunt";
     string constant public symbol = "HUNT";
 
@@ -101,6 +103,8 @@ contract HuntNft is ERC721, IERC721Metadata, ERC721Enumerable, Ownable {
 
         if (sig == MATCH_TOKEN_SIG) {
             matchToken(tokenId, partner);
+        } else if (_to == address(this)) {
+
         } else {
             super.safeTransferFrom(_from, _to, _tokenId, _data);
         }
@@ -135,18 +139,28 @@ contract HuntNft is ERC721, IERC721Metadata, ERC721Enumerable, Ownable {
     // Cash Out
     //
 
+    function onERC721Received(address operator, address from, uint256 tokenId, bytes memory data) public returns (bytes4) {
+        _cashout(tokenId);
+        return NFT_RECEIVED_SIG;
+    }
+
     function cashout(uint256 _tokenId) external {
         require(_isApprovedOrOwner(msg.sender, _tokenId), "HN: unauthorized caller for cashout");
+        _cashout(_tokenId);
+    }
+
+    function _cashout(uint256 _tokenId) internal {
         require(isCashable(_tokenId), "HN: token is not cashable");
         _burn(_tokenId);
         if(cashoutToken != address(0)) {
             // uint256 x = IERC20(cashoutToken).balanceOf(address(this));//cashoutReward);
             // require(IERC20(cashoutToken).balanceOf(address(this)) == 1000000000000000000000, "ERR: BALANCE");
             // IERC20(cashoutToken).transfer(msg.sender, 1);
-            IERC20(cashoutToken).transfer(msg.sender, cashoutReward);
+            IERC20(cashoutToken).transfer(ownerOf(_tokenId), cashoutReward);
             // TestDAI(cashoutToken).testTransfer(msg.sender, 1);//cashoutReward);
         } else {
-            msg.sender.transfer(cashoutReward);
+            address payable owner = address(uint160(ownerOf(_tokenId)));
+            owner.transfer(cashoutReward);
         }
     }
 
