@@ -96,23 +96,24 @@ class Home extends Component {
                                 <h4>How to play</h4>
 
                                 <p>Find someone else with the emoji you need</p>
-                                <p>Enter each other's Argent usernames, combine emojis and move to the next round!</p>
+                                <p>To move to the next round, match your emojis by entering each other's Argent usernames!</p>
                                 <p className="small">We don't advise you share your ENS publicly.</p>
                             </div>
                             {tokens.length === 0 ? (
-                                <h2>Your Emojis will appear shortly</h2>
+                                <h2>Loading your Emojis...</h2>
                             ) : (
                                 <div>
                                 <h2>Your Emojis</h2>
 
-                                {tokens.map( (token) => {
+                                {tokens.map( (token, index) => {
                                     return(
                                         <Token
                                             id={token.id}
                                             uri={token.uri}
                                             match={token.match}
                                             provider={this.provider}
-                                            onError={this.props.onError}/>
+                                            onError={this.props.onError}
+                                            key={index}/>
                                     )
                                 })}
                                 </div>

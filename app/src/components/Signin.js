@@ -8,42 +8,28 @@ class Signin extends Component {
 
         this.state = {
             ens: null,
-            isRegistering: false
+            isRegistering: false,
+            timer: null
         }
-
-        this.timerId = null;
     }
 
     componentDidMount = async () => {
-		//this.startTimer();
-    }
-
-    startTimer = () => {
         var countDownDate = new Date("July 26, 2019 24:00:00").getTime();
-
-        if(!this.timerId) {
-            this.timerId = setInterval(() => {
-                var now = new Date().getTime();
-                var distance = countDownDate - now;
-            
-                if(this.timer == null) {
-                    this.timer = {}
-                }
-                // Time calculations for days, hours, minutes and seconds
-                let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var now = new Date().getTime();
+        var distance = countDownDate - now;
     
-                this.setState({
-                    timer: {
-                        days,
-                        hours,
-                        minutes
-                    }
-                })
-            } , 1000);
-        }
-        
+        // Time calculations for days, hours, minutes and seconds
+        let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+        this.setState({
+            timer: {
+                days,
+                hours,
+                minutes
+            }
+        })
     }
 
     handleInputChange = event => { 
@@ -74,13 +60,13 @@ class Signin extends Component {
                 const data = await response.json(); 
                 switch(data.message) {
                     case 'ensNotRegistered':
-                        this.props.onError(new Error('Please download Argent first, then try again'));
+                        this.props.onError(new Error('Please download Argent first, then try again.'));
                         break;
                     case 'ensMalformedOrTooShort':
-                        this.props.onError(new Error('ENS incorrect'));
+                        this.props.onError(new Error('Your ENS is incorrect, please use a valid Argent ENS.'));
                         break;
                     default:
-                        this.props.onError(new Error('Unknown server error'));
+                        this.props.onError(new Error('Ooops, something unexpected happened... try again later.'));
                 }
                 this.setState({isRegistering: false});
                 return;
@@ -112,17 +98,17 @@ class Signin extends Component {
 
                         <div className="timer">
                         <div className="days">
-                            <span className="countdown-value">{this.timerId ? this.state.timer.days : 0}</span>
+                            <span className="countdown-value">{this.state.timer ? this.state.timer.days : 0}</span>
                             DAIs
                         </div>
 
                         <div className="hours">
-                            <span className="countdown-value">{this.timerId ? this.state.timer.hours : 0}</span>
+                            <span className="countdown-value">{this.state.timer ? this.state.timer.hours : 0}</span>
                             hrs
                         </div>
 
                         <div className="minutes">
-                            <span className="countdown-value">{this.timerId ? this.state.timer.minutes : 0}</span>
+                            <span className="countdown-value">{this.state.timer ? this.state.timer.minutes : 0}</span>
                             min
                         </div>
                         </div>
@@ -135,8 +121,8 @@ class Signin extends Component {
                         <div className="how-to-play__box">
                             <h5>Download Argent</h5>
                             <div className="app-store-buttons">
-                                <a href="http://argent.app.link"><img src="assets/images/app-store.svg" alt="Download on the App Store" /></a>
-                                <a href="http://argent.app.link"><img src="assets/images/google-play.svg" alt="Download on Google Play" /></a>
+                                <a href={process.env.REACT_APP_GOLDEN_TOKEN_LINK}><img src="assets/images/app-store.svg" alt="Download on the App Store" /></a>
+                                <a href={process.env.REACT_APP_GOLDEN_TOKEN_LINK}><img src="assets/images/google-play.svg" alt="Download on Google Play" /></a>
                             </div>
                         </div>
 
