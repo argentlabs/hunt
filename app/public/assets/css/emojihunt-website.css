@@ -236,6 +236,17 @@
 
 
 
+.share {
+  background-color: var(--argent-sand);
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.share .small {
+  font-weight: bold;
+  margin: 8px 0;
+}
+
 .button {
   display: block;
   width: 100%;

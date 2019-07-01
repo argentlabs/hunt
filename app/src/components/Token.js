@@ -106,8 +106,12 @@ class Token extends Component {
                         <img src={target ? target.icon : null} alt="The Emoji NFT you need" />
                     </div>
                 </div>
+
                 {image && target ? (
-                    <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" className="twitter-share-button" data-size="large" data-text={`Let's both win 500 #DAI! I have ${image.twitter} and need ${target.twitter}`} data-url="https://emojihunt.argent.xyz" data-hashtags="emojihunt" data-show-count="false">Find a match on Twitter</a>
+                    <div className="share">
+                        <div className="small">Share your emoji to find a match!</div>
+                        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" className="twitter-share-button" data-size="large" data-text={`Let's both win 500 #DAI! I have ${image.twitter} and need ${target.twitter}`} data-url="https://emojihunt.argent.xyz" data-hashtags="emojihunt" data-show-count="false">Find a match on Twitter</a>
+                    </div>
                 ) : null }
                 
                 <div className="form-group">
