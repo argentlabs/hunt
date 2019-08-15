@@ -11,7 +11,7 @@ import "openzeppelin-solidity/contracts/token/ERC721/IERC721Receiver.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
 
-contract HuntNft is ERC721, IERC721Metadata, ERC721Enumerable, IERC721Receiver, Ownable {
+contract HuntNft is ERC721, IERC721Metadata, ERC721Enumerable, Ownable {
 
     bytes4 constant internal MATCH_TOKEN_SIG = bytes4(keccak256("matchToken(uint256,address)"));
     bytes4 constant internal NFT_RECEIVED_SIG = bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"));
@@ -104,7 +104,7 @@ contract HuntNft is ERC721, IERC721Metadata, ERC721Enumerable, IERC721Receiver, 
         if (sig == MATCH_TOKEN_SIG) {
             matchToken(tokenId, partner);
         } else if (_to == address(this)) {
-            _cashout(_tokenId);
+            cashout(_tokenId);
         } else {
             super.safeTransferFrom(_from, _to, _tokenId, _data);
         }
@@ -139,25 +139,16 @@ contract HuntNft is ERC721, IERC721Metadata, ERC721Enumerable, IERC721Receiver, 
     // Cash Out
     //
 
-    function onERC721Received(address operator, address from, uint256 tokenId, bytes memory data) public returns (bytes4) {
-        _cashout(tokenId);
-        return NFT_RECEIVED_SIG;
-    }
-
-    function cashout(uint256 _tokenId) external {
+    function cashout(uint256 _tokenId) public {
         require(_isApprovedOrOwner(msg.sender, _tokenId), "HN: unauthorized caller for cashout");
-        _cashout(_tokenId);
-    }
-
-    function _cashout(uint256 _tokenId) internal {
         require(isCashable(_tokenId), "HN: token is not cashable");
-        _burn(_tokenId);
         if(cashoutToken != address(0)) {
             IERC20(cashoutToken).transfer(ownerOf(_tokenId), cashoutReward);
         } else {
             address payable owner = address(uint160(ownerOf(_tokenId)));
             owner.transfer(cashoutReward);
         }
+        _burn(_tokenId);
     }
 
     function isCashable(uint256 _tokenId) public view returns (bool) {
