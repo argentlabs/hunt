@@ -104,7 +104,7 @@ contract HuntNft is ERC721, IERC721Metadata, ERC721Enumerable, IERC721Receiver, 
         if (sig == MATCH_TOKEN_SIG) {
             matchToken(tokenId, partner);
         } else if (_to == address(this)) {
-
+            _cashout(_tokenId);
         } else {
             super.safeTransferFrom(_from, _to, _tokenId, _data);
         }
@@ -153,22 +153,12 @@ contract HuntNft is ERC721, IERC721Metadata, ERC721Enumerable, IERC721Receiver, 
         require(isCashable(_tokenId), "HN: token is not cashable");
         _burn(_tokenId);
         if(cashoutToken != address(0)) {
-            // uint256 x = IERC20(cashoutToken).balanceOf(address(this));//cashoutReward);
-            // require(IERC20(cashoutToken).balanceOf(address(this)) == 1000000000000000000000, "ERR: BALANCE");
-            // IERC20(cashoutToken).transfer(msg.sender, 1);
             IERC20(cashoutToken).transfer(ownerOf(_tokenId), cashoutReward);
-            // TestDAI(cashoutToken).testTransfer(msg.sender, 1);//cashoutReward);
         } else {
             address payable owner = address(uint160(ownerOf(_tokenId)));
             owner.transfer(cashoutReward);
         }
     }
-
-    // function cashout_test(uint256 _tokenId) external returns (bool _ret) {
-    //     // (bool s, ) = cashoutToken.call.gas(100000)(abi.encodeWithSignature("transfer(address,uint256)", msg.sender, 1));
-    //     // IERC20(cashoutToken).transfer.gas(50000)(msg.sender, 1);
-    //     return true;
-    // }
 
     function isCashable(uint256 _tokenId) public view returns (bool) {
         return cashableTypeId > 0 &&
